@@ -6,10 +6,12 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.RemoverItem
     public class RemoveItemFromSaleCommandHandler : IRequestHandler<RemoveItemFromSaleCommand, RemoveItemFromSaleResult>
     {
         private readonly ISaleRepository _saleRepository;
+        private readonly IMediator _mediator;
 
-        public RemoveItemFromSaleCommandHandler(ISaleRepository saleRepository)
+        public RemoveItemFromSaleCommandHandler(ISaleRepository saleRepository, IMediator mediator)
         {
             _saleRepository = saleRepository;
+            _mediator = mediator;
         }
 
         public async Task<RemoveItemFromSaleResult> Handle(RemoveItemFromSaleCommand command, CancellationToken cancellationToken)
@@ -36,7 +38,8 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.RemoverItem
                         Message = "Item não encontrado na venda."
                     };
                 }
-  
+
+                sale.SetMediator(_mediator);
                 sale.RemoveItem(item);
 
                 await _saleRepository.UpdateAsync(sale, cancellationToken);

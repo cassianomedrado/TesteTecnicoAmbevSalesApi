@@ -9,7 +9,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
     public class Sale : BaseEntity
     {
-        private readonly IMediator _mediator;
+        private IMediator _mediator;
         public string SaleNumber { get; private set; }
         public DateTime SaleDate { get; private set; }
         public Guid CustomerId { get; private set; }
@@ -36,6 +36,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             _mediator = mediator;
 
             _mediator.Publish(new SaleCreatedEvent(SaleNumber, SaleDate));
+        }
+
+        public void SetMediator(IMediator mediator)
+        {
+            _mediator = mediator;
         }
 
         public void AddItem(SaleItem item)

@@ -42,7 +42,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.CreateSale
                 {
                     SaleId = createdSale.Id,
                     SaleNumber = createdSale.SaleNumber,
-                    SaleDate = createdSale.SaleDate,
+                    SaleDate = DateTime.SpecifyKind(request.SaleDate, DateTimeKind.Utc),
                     TotalValue = createdSale.TotalValue
                 };
             }

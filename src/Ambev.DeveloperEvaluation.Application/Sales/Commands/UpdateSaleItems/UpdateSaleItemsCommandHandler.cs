@@ -6,10 +6,12 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.UpdateSaleItems
     public class UpdateSaleItemsCommandHandler : IRequestHandler<UpdateSaleItemsCommand, UpdateSaleItemsResult>
     {
         private readonly ISaleRepository _saleRepository;
+        private readonly IMediator _mediator;
 
-        public UpdateSaleItemsCommandHandler(ISaleRepository saleRepository)
+        public UpdateSaleItemsCommandHandler(ISaleRepository saleRepository, IMediator mediator)
         {
             _saleRepository = saleRepository;
+            _mediator = mediator;
         }
 
         public async Task<UpdateSaleItemsResult> Handle(UpdateSaleItemsCommand command, CancellationToken cancellationToken)
@@ -23,7 +25,9 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.UpdateSaleItems
                     {
                         Success = false,
                         Message = "Venda não encontrada."
-                    };      
+                    };
+
+                sale.SetMediator(_mediator);
 
                 foreach (var item in command.Items)
                 {

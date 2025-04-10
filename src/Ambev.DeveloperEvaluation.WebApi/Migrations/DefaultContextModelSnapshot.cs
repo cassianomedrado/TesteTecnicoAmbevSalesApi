@@ -141,6 +141,9 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("numeric");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 

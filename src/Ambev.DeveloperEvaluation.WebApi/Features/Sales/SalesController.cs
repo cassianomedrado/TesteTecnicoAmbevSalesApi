@@ -79,9 +79,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         [ProducesResponseType(typeof(ApiResponseWithData<List<GetAllSalesResponse>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var query = _mapper.Map<GetAllSalesQuery>(new GetAll.GetAllSalesRequest());
-
-            var result = await _mediator.Send(query, cancellationToken);
+            var result = await _mediator.Send(new GetAllSalesQuery(), cancellationToken);
 
             return Ok(new ApiResponseWithData<List<GetAllSalesResponse>>
             {

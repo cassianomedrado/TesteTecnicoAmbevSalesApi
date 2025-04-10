@@ -7,7 +7,10 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale
     {
         public CreateSaleProfile()
         {
-            CreateMap<CreateSaleRequest, CreateSaleCommand>();
+            CreateMap<CreateSaleRequest, CreateSaleCommand>()
+                .ForMember(dest => dest.SaleDate, opt =>
+                    opt.MapFrom(src => DateTime.SpecifyKind(src.SaleDate, DateTimeKind.Utc)));
+
             CreateMap<CreateSaleItemRequest, SaleItemDto>();
             CreateMap<CreateSaleResult, CreateSaleResponse>();
         }

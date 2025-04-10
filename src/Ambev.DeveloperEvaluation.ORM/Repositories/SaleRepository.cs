@@ -15,23 +15,33 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
         public async Task<Sale> CreateAsync(Sale sale, CancellationToken cancellationToken = default)
         {
-            await _context.Sales.AddAsync(sale, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-            return sale;
+            try
+            {
+                await _context.Sales.AddAsync(sale, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                return sale;
+            }
+            catch (Exception ex) {
+                throw new ArgumentException(ex.Message);
+            }
+
         }
 
         public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _context.Sales
-                .Include(s => s.Items) 
-                .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+                .Include(s => s.Items)
+                    .ThenInclude(i => i.Product)
+                        .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+
         }
 
         public async Task<List<Sale>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Sales
+            return await _context.Sales 
                 .Include(s => s.Items)
-                .ToListAsync(cancellationToken);
+                    .ThenInclude(i => i.Product)
+                        .ToListAsync(cancellationToken);
         }
 
         public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)

@@ -6,10 +6,12 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.CancelSale
     public class CancelSaleCommandHandler : IRequestHandler<CancelSaleCommand, CancelSaleResult>
     {
         private readonly ISaleRepository _saleRepository;
+        private readonly IMediator _mediator;
 
-        public CancelSaleCommandHandler(ISaleRepository saleRepository)
+        public CancelSaleCommandHandler(ISaleRepository saleRepository, IMediator mediator)
         {
             _saleRepository = saleRepository;
+            _mediator = mediator;
         }
 
         public async Task<CancelSaleResult> Handle(CancelSaleCommand command, CancellationToken cancellationToken)
@@ -26,6 +28,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.Commands.CancelSale
                     };
                 }
 
+                sale.SetMediator(_mediator);
                 sale.Cancel();
                 await _saleRepository.UpdateAsync(sale, cancellationToken);
 
